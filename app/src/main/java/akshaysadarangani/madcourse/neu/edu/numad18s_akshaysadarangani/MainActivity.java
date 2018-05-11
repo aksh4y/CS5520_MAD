@@ -1,7 +1,6 @@
 package akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         error.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent errorIntent = new Intent(MainActivity.this, ErrorActivity.class);
-                startActivity(errorIntent);
+                throw new RuntimeException("This is an intentional crash.");
             }
         });
     }
