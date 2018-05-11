@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NUMAD18S-AkshaySadarangani</string>
+
+    <!-- Buttons -->
+    <string name="about_btn_label">About</string>
+
+    <!-- About -->
+    <string name="about_name">Akshay Sadarangani</string>
+    <string name="about_email">sadarangani.a@husky.neu.edu</string>
+    <string name="about_year">2nd Year Grad Student</string>
+    <string name="headshot_desc">Headshot Image</string>
+</resources>
