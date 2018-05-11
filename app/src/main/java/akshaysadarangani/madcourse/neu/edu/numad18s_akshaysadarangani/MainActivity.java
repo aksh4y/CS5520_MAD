@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button about;
+    Button about, error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         about = findViewById(R.id.about_btn);
+        error = findViewById(R.id.error_btn);
+
         about.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
@@ -24,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        error.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent errorIntent = new Intent(MainActivity.this, ErrorActivity.class);
+                startActivity(errorIntent);
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@
 
     <!-- Buttons -->
     <string name="about_btn_label">About</string>
+    <string name="error_btn_label">Generate Error</string>
 
     <!-- About -->
     <string name="about_name">Akshay Sadarangani</string>
