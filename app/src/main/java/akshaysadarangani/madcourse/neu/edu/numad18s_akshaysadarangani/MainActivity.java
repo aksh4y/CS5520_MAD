@@ -5,18 +5,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     Button about, error;
+    TextView versionCode, versionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setTitle(getResources().getString(R.string.about_name));   // Change title
 
         about = findViewById(R.id.about_btn);
         error = findViewById(R.id.error_btn);
+        versionCode = findViewById(R.id.version_code);
+        versionName = findViewById(R.id.version_name);
+
+        String vName = "Version Name: " + BuildConfig.VERSION_NAME;
+        String vCode = "Version Code: " + BuildConfig.VERSION_CODE;
+        versionName.setText(vName);
+        versionCode.setText(vCode);
 
         about.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -10,3 +10,4 @@ gradle
 .externalNativeBuild
 gradlew.bat
 gradlew
+mad_key.jks

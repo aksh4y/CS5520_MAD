@@ -36,6 +36,20 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/about_btn" />
+
+        <TextView
+            android:id="@+id/version_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/version_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:gravity="center_horizontal"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
