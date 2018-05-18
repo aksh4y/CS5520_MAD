@@ -2,3 +2,4 @@
 /libs
 app.iml
 proguard-rules.pro
+*.gradle

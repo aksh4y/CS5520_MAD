@@ -1,6 +1,7 @@
 *.iml
 .gradle
 gradle
+*.gradle
 /settings.gradle
 /*.properties
 .idea/
@@ -11,3 +12,6 @@ gradle
 gradlew.bat
 gradlew
 mad_key.jks
+logo.png
+promo.jpg
+app/release/output.json
