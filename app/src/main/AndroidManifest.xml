@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AboutActivity" />
+        <activity android:name=".DictionaryActivity"></activity>
     </application>
 
 </manifest>

@@ -4,10 +4,14 @@
     <!-- Buttons -->
     <string name="about_btn_label">About</string>
     <string name="error_btn_label">Generate Error</string>
+    <string name="dictionary_btn_label">Dictionary</string>
 
     <!-- About -->
     <string name="about_name">Akshay Sadarangani</string>
     <string name="about_email">sadarangani.a@husky.neu.edu</string>
     <string name="about_year">2nd Year Grad Student</string>
     <string name="headshot_desc">Headshot Image</string>
+
+    <!-- Dictionary -->
+    <string name="title_activity_dictionary">Test Dictionary</string>
 </resources>

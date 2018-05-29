@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button about, error;
+    Button about, error, dictionary;
     TextView versionCode, versionName;
 
     @Override
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         about = findViewById(R.id.about_btn);
         error = findViewById(R.id.error_btn);
+        dictionary = findViewById(R.id.dictionary_btn);
         versionCode = findViewById(R.id.version_code);
         versionName = findViewById(R.id.version_name);
 
@@ -38,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
         error.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 throw new RuntimeException("This is an intentional crash.");
+            }
+        });
+
+        dictionary.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent dictionaryIntent = new Intent(MainActivity.this, DictionaryActivity.class);
+                startActivity(dictionaryIntent);
             }
         });
     }

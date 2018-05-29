@@ -29,7 +29,7 @@ public class AboutActivity extends AppCompatActivity {
         }
         else {
             TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-            String imeiId = tm.getDeviceId();
+            String imeiId = "IMEI/MEID: " + tm.getDeviceId();
             imei.setText(imeiId);
         }
     }
@@ -43,7 +43,8 @@ public class AboutActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-                    imei.setText(tm.getDeviceId());
+                    String imeiId = "IMEI/MEID: " + tm.getDeviceId();
+                            imei.setText(imeiId);
                 } else {
                     Toast.makeText(getApplicationContext(), "Please grant permission to view phone IMEI", Toast.LENGTH_LONG).show();
                 }
