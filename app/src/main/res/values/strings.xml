@@ -20,4 +20,5 @@
     <string name="ack_btn_label">Acknowledgements</string>
     <string name="ack_url1">https://developer.android.com/guide/topics/ui/layout/recyclerview</string>
     <string name="ack_title">LINKS</string>
+    <string name="ack_url2">https://stackoverflow.com/questions/33671196/floatingactionbutton-with-text-instead-of-image</string>
 </resources>
