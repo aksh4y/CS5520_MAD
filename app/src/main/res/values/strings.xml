@@ -5,6 +5,7 @@
     <string name="about_btn_label">About</string>
     <string name="error_btn_label">Generate Error</string>
     <string name="dictionary_btn_label">Dictionary</string>
+    <string name="clear_btn_label">Clear</string>
 
     <!-- About -->
     <string name="about_name">Akshay Sadarangani</string>
@@ -14,4 +15,6 @@
 
     <!-- Dictionary -->
     <string name="title_activity_dictionary">Test Dictionary</string>
+    <string name="search_hint">Enter your search term</string>
+    <string name="search_title">Enter search term</string>
 </resources>
