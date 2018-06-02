@@ -91,8 +91,10 @@ public class DictionaryActivity extends AppCompatActivity {
                 if(s != null && s != "" && s.length() > 2 && search.isWord(s.toString()) && !data.contains(s.toString())) {
                     toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,150); // beep
                     data.add(s.toString());
-                    mAdapter.notifyItemInserted(data.size()-1);
-                    clearFocus();
+                    mAdapter.notifyDataSetChanged();
+                    //notifyChanges();
+
+                    //clearFocus();
                 }
             }
 
@@ -101,9 +103,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
             }
         });
-
         fab.setImageBitmap(textAsBitmap("Clear", 40, Color.WHITE));
-
     }
 
     //method to convert your text to image
@@ -116,7 +116,6 @@ public class DictionaryActivity extends AppCompatActivity {
         int width = (int) (paint.measureText(text) + 0.0f); // round
         int height = (int) (baseline + paint.descent() + 0.0f);
         Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
         Canvas canvas = new Canvas(image);
         canvas.drawText(text, 0, baseline, paint);
         return image;
