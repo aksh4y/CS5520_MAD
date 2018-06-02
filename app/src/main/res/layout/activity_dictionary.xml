@@ -5,36 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     tools:context=".DictionaryActivity">
 
+
     <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_width="0px"
-        android:layout_height="0px" />
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/acknowledgement"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ack_btn_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/searchTerm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
         android:layout_weight="1"
+        android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="@string/search_hint"
         android:inputType="textPersonName"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
-        android:hint="@string/search_hint"/>
+        android:padding="5dip"
+        app:layout_constraintTop_toBottomOf="@id/acknowledgement" />
 
-    <Button style="@style/Widget.AppCompat.Button.Colored"
-        android:id="@+id/clear"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/clear_btn_label"
-        app:layout_constraintLeft_toRightOf="@+id/searchTerm"/>
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="5dp"
+        app:layout_constraintLeft_toRightOf="@+id/searchTerm"
+        app:layout_constraintTop_toBottomOf="@id/acknowledgement"
+        app:srcCompat="@color/colorAccent" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@+id/clear"/>
+        app:layout_constraintTop_toBottomOf="@+id/floatingActionButton">
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.constraint.ConstraintLayout>

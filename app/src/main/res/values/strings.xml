@@ -15,6 +15,9 @@
 
     <!-- Dictionary -->
     <string name="title_activity_dictionary">Test Dictionary</string>
-    <string name="search_hint">Enter your search term</string>
-    <string name="search_title">Enter search term</string>
+    <string name="search_hint">Enter search term</string>
+    <string name="search_title">Search</string>
+    <string name="ack_btn_label">Acknowledgements</string>
+    <string name="ack_url1">https://developer.android.com/guide/topics/ui/layout/recyclerview</string>
+    <string name="ack_title">LINKS</string>
 </resources>
