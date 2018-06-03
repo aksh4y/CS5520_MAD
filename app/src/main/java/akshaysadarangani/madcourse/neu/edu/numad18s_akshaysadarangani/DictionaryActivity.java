@@ -8,7 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.media.ToneGenerator;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,9 +59,6 @@ public class DictionaryActivity extends AppCompatActivity {
         data = new ArrayList<>();
         mAdapter = new MyAdapter(data);
         mRecyclerView.setAdapter(mAdapter);
-
-        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-
         inputStream = getResources().openRawResource(R.raw.wordlist);
         search = new Search(inputStream);
         txt = findViewById(R.id.searchTerm);
@@ -88,13 +88,21 @@ public class DictionaryActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s != null && s != "" && s.length() > 2 && search.isWord(s.toString()) && !data.contains(s.toString())) {
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,150); // beep
+                if(s != null && s != "" && s.length() > 2 && search.isWord(s.toString()) && !data.contains(s.toString())) { // match found
+                    // beep
+                    try {
+                        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+                        toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,150); // beep
+                    } catch (Exception e) {
+                        try {
+                            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                            r.play();
+                        } catch (Exception x) {x.printStackTrace();}
+                    }
+
                     data.add(s.toString());
                     mAdapter.notifyDataSetChanged();
-                    //notifyChanges();
-
-                    //clearFocus();
                 }
             }
 
