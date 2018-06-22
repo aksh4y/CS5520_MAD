@@ -19,9 +19,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".AboutActivity" />
-        <activity android:name=".DictionaryActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".AcknowledgementsActivity"/>
+        <activity
+            android:name=".DictionaryActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".AcknowledgementsActivity" />
+        <activity android:name=".ScroggleActivity" />
+        <activity android:name=".GameActivity"/>
     </application>
 
 </manifest>

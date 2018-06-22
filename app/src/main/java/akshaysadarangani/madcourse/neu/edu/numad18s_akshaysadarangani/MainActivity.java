@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button about, error, dictionary;
+    Button about, error, dictionary, scroggle;
     TextView versionCode, versionName;
 
     @Override
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         about = findViewById(R.id.about_btn);
         error = findViewById(R.id.error_btn);
         dictionary = findViewById(R.id.dictionary_btn);
+        scroggle = findViewById(R.id.scroggle_btn);
         versionCode = findViewById(R.id.version_code);
         versionName = findViewById(R.id.version_name);
 
@@ -45,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
         dictionary.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent dictionaryIntent = new Intent(MainActivity.this, DictionaryActivity.class);
+                startActivity(dictionaryIntent);
+            }
+        });
+
+        scroggle.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent dictionaryIntent = new Intent(MainActivity.this, ScroggleActivity.class);
                 startActivity(dictionaryIntent);
             }
         });
