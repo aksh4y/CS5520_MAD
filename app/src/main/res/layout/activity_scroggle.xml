@@ -4,7 +4,8 @@
    android:layout_width="match_parent"
    android:layout_height="match_parent"
    android:clipChildren="false"
-   tools:context=".ScroggleActivity">
+   tools:context=".ScroggleActivity"
+    android:background="@drawable/gradient">
 
    <fragment
       android:id="@+id/main_fragment"
