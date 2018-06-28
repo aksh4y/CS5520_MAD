@@ -14,6 +14,7 @@
     android:elevation="@dimen/elevation_high"
     android:orientation="vertical"
     android:padding="@dimen/menu_padding"
+    android:background="@drawable/gradient"
     tools:context=".ScroggleActivity">
 
     <TextView

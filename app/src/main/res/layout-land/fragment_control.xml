@@ -16,6 +16,14 @@
    tools:context=".GameActivity">
 
    <Button
+       android:id="@+id/button_pause"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:elevation="@dimen/elevation_low"
+       android:drawableTop="@drawable/pause"
+       android:text="@string/pause_label"/>
+
+   <Button
       android:id="@+id/button_restart"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

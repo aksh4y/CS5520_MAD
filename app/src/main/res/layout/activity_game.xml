@@ -1,37 +1,67 @@
 
 <FrameLayout
-   xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:tools="http://schemas.android.com/tools"
-   android:layout_width="match_parent"
-   android:layout_height="match_parent"
-   tools:context=".ScroggleActivity">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScroggleActivity">
 
-   <ImageView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:scaleType="centerCrop"
-      android:src="@drawable/gradient"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/gradient"/>
 
-   <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-      <fragment
-         android:id="@+id/fragment_game"
-         class="akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.GameFragment"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         tools:layout="@layout/fragment_game"/>
-      <!-- Control fragment goes here... -->
-      <fragment
-         android:id="@+id/fragment_game_controls"
-         class="akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.ControlFragment"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         tools:layout="@layout/fragment_control"/>
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="TIME LEFT: " />
 
-   </LinearLayout>
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="SCORE: " />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <fragment
+            android:id="@+id/fragment_game"
+            class="akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.GameFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_game"/>
+        <!-- Control fragment goes here... -->
+        <fragment
+            android:id="@+id/fragment_game_controls"
+            class="akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.ControlFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_control"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -25,7 +25,7 @@
 
     <!-- Scroggle -->
 
-    <string name="long_app_name">Ultimate Tic Tac Toe</string>
+    <string name="long_app_name">SCROGGLE</string>
     <string name="action_settings">Settings</string>
     <string name="restart_label">Restart</string>
     <string name="main_menu_label">Main Menu</string>
@@ -43,4 +43,7 @@ A tie happens when there are no further moves.
 In the case of a tie in a small board, that will count as a win for
 both sides in the larger game.
 </string>
+    <string name="pause_label">Pause</string>
+    <string name="submit_label">Submit</string>
+    <string name="volume_on_label">Volume On</string>
 </resources>
