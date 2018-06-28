@@ -42,6 +42,7 @@ public class GameFragment extends Fragment {
     private int score = 0;
     private ImageButton submit;
     private TextView words;
+    private TextView scoreView;
     private String word = "";
     private Search search;
 
@@ -142,6 +143,13 @@ public class GameFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FrameLayout fl = getActivity().findViewById(R.id.frameLayout1);
+                LinearLayout item = fl.findViewById(R.id.linearLayout1);
+                scoreView = item.findViewById(R.id.score);
+                if(word.length() < 3) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Make sure word has at least 3 letters!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(search.isWord(word)) {
                     String str = words.getText().toString() + " " + word.toUpperCase();
                     words.setText(str);
@@ -149,9 +157,6 @@ public class GameFragment extends Fragment {
                     setAllAvailable();
                     makeTilesAvailable(view);
                     mLargeTiles[mLastLarge].setmCompleted(true);
-                    FrameLayout fl = getActivity().findViewById(R.id.frameLayout1);
-                    LinearLayout item = fl.findViewById(R.id.linearLayout1);
-                    final TextView scoreView = item.findViewById(R.id.score);
                     if(scoreView.getText().toString().substring(6).trim().equals(""))
                         score = 0;
                     else
@@ -163,16 +168,17 @@ public class GameFragment extends Fragment {
                         score += 5;
                         Toast.makeText(getActivity().getApplicationContext(), "Good Job! Bonus Points Earned.", Toast.LENGTH_SHORT).show();
                     }
-                    String scoreText = "SCORE: " + Integer.toString(score);
-                    scoreView.setText(scoreText);
-                    checkBoardOver();
                 }
                 else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Invalid word!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Invalid word! -2 Points", Toast.LENGTH_SHORT).show();
                     // shake board
+                    score -= 2;
                     shakeBoard(view);
 
                 }
+                String scoreText = "SCORE: " + Integer.toString(score);
+                scoreView.setText(scoreText);
+                checkBoardOver();
                 word = "";
             }
         });
@@ -221,7 +227,7 @@ public class GameFragment extends Fragment {
             final Tile smallTile = mSmallTiles[mLastLarge][j];
             smallTile.setView(inner);
             if(smallTile.ismAvailable())
-                inner.setVisibility(View.GONE);
+                inner.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -318,6 +324,16 @@ public class GameFragment extends Fragment {
                 Tile tile = mSmallTiles[large][small];
                 if (tile.ismAvailable())
                     addAvailable(tile);
+            }
+        }
+    }
+
+    public void setAvailableForPhase2() {
+        clearAvailable();
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                Tile tile = mSmallTiles[large][small];
+                addAvailable(tile);
             }
         }
     }

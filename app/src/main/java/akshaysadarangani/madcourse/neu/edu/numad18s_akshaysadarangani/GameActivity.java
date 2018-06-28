@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
@@ -16,6 +17,7 @@ public class GameActivity extends Activity {
     private GameFragment mGameFragment;
     private int timer = 90;
     private CountDownTimer cTimer;
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class GameActivity extends Activity {
                 mGameFragment.putState(gameData);
             }
         }
+        tv = findViewById(R.id.timer);
         timerStart(timer * 1000);
         Log.d("UT3", "restore = " + restore);
     }
@@ -41,9 +44,10 @@ public class GameActivity extends Activity {
     }
 
     public void timerStart(long duration) {
-        final TextView tv = findViewById(R.id.timer);
         cTimer = new CountDownTimer(duration, 1000) {
             public void onTick(long millisUntilFinished) {
+                if(timer <= 10)
+                    tv.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
                 tv.setText("TIME LEFT 0:" + checkDigit(timer));
                 timer--;
             }
@@ -62,6 +66,11 @@ public class GameActivity extends Activity {
             cTimer.cancel();
         timer = 90;
         mGameFragment.restartGame();
+        tv.setTextColor(getResources().getColor(android.R.color.white));
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .show(mGameFragment)
+                .commit();
         timerStart(timer * 1000);
     }
 
@@ -85,6 +94,16 @@ public class GameActivity extends Activity {
     }
 
     public void finishPhase1(){//final Tile.Owner winner) {
+        cTimer.cancel();
+
+        if(timer > 10) {
+            TextView sV = findViewById(R.id.score);
+            int score = Integer.parseInt(sV.getText().toString());
+            score += 5; // 5 bonus points for finishing quick
+            sV.setText(score);
+            Toast.makeText(getApplicationContext(), "Good Job! Bonus Points Earned For Finishing Quick.", Toast.LENGTH_SHORT).show();
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Phase 1 Over! Moving On To Phase 2.");
         builder.setCancelable(false);
@@ -92,8 +111,10 @@ public class GameActivity extends Activity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //finish();
+                        finish();
                         // start phase 2
+                        mGameFragment.setAvailableForPhase2();
+                        timerStart(30000);
                     }
                 });
         final Dialog dialog = builder.create();
