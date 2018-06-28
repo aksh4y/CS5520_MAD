@@ -24,11 +24,12 @@ public class MainFragment extends Fragment {
         View continueButton = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
         View ack = rootView.findViewById(R.id.ack_button);
+        View howto = rootView.findViewById(R.id.about_howto);
 
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), GameActivity.class);
+                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                 getActivity().startActivity(intent);
             }
         });
@@ -70,6 +71,14 @@ public class MainFragment extends Fragment {
                             }
                         });
                 mDialog = builder.show();
+            }
+        });
+        howto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                intent.putExtra("FORCE", true);
+                getActivity().startActivity(intent);
             }
         });
         return rootView;

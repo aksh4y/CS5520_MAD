@@ -47,7 +47,26 @@ both sides in the larger game.
     <string name="submit_label">Submit</string>
     <string name="volume_on_label">Volume On</string>
     <string name="howto_label">How to Play</string>
-    <string name="ack_text">CC0 Icons From Icons8\n
-        Animation: https://stackoverflow.com/questions/9448732/shaking-wobble-view-animation-in-android\n
-        Countdown: https://stackoverflow.com/questions/8306374/android-how-to-pause-and-resume-a-count-down-timer</string>
+    <string name="ack_text">CC0 Icons From Icons8\n\nAnimation: https://stackoverflow.com/questions/9448732/shaking-wobble-view-animation-in-android\n\nCountdown: https://stackoverflow.com/questions/8306374/android-how-to-pause-and-resume-a-count-down-timer</string>
+
+    <string name="title_activity_welcome">How to Play</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Welcome!</string>
+    <string name="slide_1_desc">Make valid words in each board to score points. Longer words score bigger.</string>
+
+    <string name="slide_2_title">Instructions</string>
+    <string name="slide_2_desc">Select 3 or more letters in the order of the word and click the check mark to submit.</string>
+
+
+    <string name="slide_3_title">Buttons</string>
+    <string name="slide_3_desc">Use the pause button to Pause the game, Volume button to toggle game sounds and Clear button to clear a selection of letters</string>
+
+    <string name="slide_4_title">Scoring</string>
+    <string name="slide_4_desc">Score points based on scrabble letters and word length. Earn bonus scores when you beat the clock and for using all 9 letters of a block. Lose -2 for wrong words.</string>
+
+    <string name="play_again_desc">To see the game instructions again, click How to Play in the Word Game screen</string>
+    <string name="play_again">Play Again</string>
 </resources>

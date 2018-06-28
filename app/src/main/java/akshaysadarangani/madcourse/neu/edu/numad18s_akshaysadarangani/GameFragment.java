@@ -40,7 +40,6 @@ public class GameFragment extends Fragment {
     private Tile mEntireBoard = new Tile(this);
     private Tile mLargeTiles[] = new Tile[9];
     private Tile mSmallTiles[][] = new Tile[9][9];
-    private Tile.Owner mPlayer = Tile.Owner.X;
     private Set<Tile> mAvailable = new HashSet<>();
     private int mLastLarge;
     private int mLastSmall;
@@ -49,6 +48,7 @@ public class GameFragment extends Fragment {
     private ImageButton volume;
     private TextView words;
     private TextView scoreView;
+    private TextView timer;
     private String word = "";
     private Search search;
     private View view;
@@ -67,17 +67,7 @@ public class GameFragment extends Fragment {
         InputStream inputStream = getResources().openRawResource(R.raw.wordlist);
         search = new Search(inputStream);
         initGame();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         ((GameActivity) getActivity()).playMusic();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     private void clearAvailable() {
@@ -102,6 +92,16 @@ public class GameFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void initViews(final View rootView) {      // @TODO: Set up letters here
         mEntireBoard.setView(rootView);
@@ -119,10 +119,12 @@ public class GameFragment extends Fragment {
             for (int small = 0; small < 9; small++) {
                 final Button inner = outer.findViewById
                         (mSmallIds[small]);
-                inner.setText(Character.toString(letters[small]));
                 final int fLarge = large;
                 final int fSmall = small;
                 final Tile smallTile = mSmallTiles[large][small];
+                if(smallTile.letter == ' ')
+                    smallTile.letter = letters[small];
+                inner.setText(Character.toString(smallTile.letter));
                 smallTile.setView(inner);
                 smallTile.small = fSmall;
                 smallTile.large = fLarge;
@@ -526,10 +528,17 @@ public class GameFragment extends Fragment {
                 builder.append(',');
             }
         }
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                builder.append(mSmallTiles[large][small].letter);
+                builder.append(',');
+            }
+        }
         builder.append(word);
         builder.append(',');
         builder.append(((GameActivity) getActivity()).timer);
         builder.append(',');
+        Log.e("GET", Integer.toString(score));
         builder.append(score);
         builder.append(',');
         return builder.toString();
@@ -547,9 +556,17 @@ public class GameFragment extends Fragment {
                 mSmallTiles[large][small].setmAvailable(val);
             }
         }
-        word = fields[index++];
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                mSmallTiles[large][small].letter = fields[index++].charAt(0);
+            }
+        }
+                word = fields[index++];
         ((GameActivity) getActivity()).timer = Integer.parseInt(fields[index++]);
         score = Integer.parseInt(fields[index++]);
+        /*String scoring = "SCORE: " + Integer.toString(score);
+
+        ((GameActivity) getActivity()).sV.setText(scoring);*/
         setAvailableFromLastMove(mLastSmall);
         updateAllTiles();
     }

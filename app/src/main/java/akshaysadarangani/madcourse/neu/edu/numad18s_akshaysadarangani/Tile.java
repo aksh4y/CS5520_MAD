@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 
 public class Tile {
 
+    public char letter = ' ';
     public enum Owner {
         X, O /* letter O */, NEITHER, BOTH
     }

@@ -3,7 +3,6 @@
     package="akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -26,7 +25,10 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".AcknowledgementsActivity" />
         <activity android:name=".ScroggleActivity" />
-        <activity android:name=".GameActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".GameActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".WelcomeActivity"></activity>
     </application>
 
 </manifest>

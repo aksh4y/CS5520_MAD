@@ -18,12 +18,13 @@ public class GameActivity extends Activity {
     public static final String PREF_RESTORE = "pref_restore";
     public boolean PHASE2 = false;
     private boolean VOLUME_ON = true;
+    public boolean PAUSED = false;
     private GameFragment mGameFragment;
     public int timer = 20;
-    private CountDownTimer cTimer;
+    public CountDownTimer cTimer;
     private TextView tv;
-    private TextView sV;
-    private MediaPlayer mMediaPlayer;
+    public TextView sV;
+    public MediaPlayer mMediaPlayer;
 
 
     @Override
@@ -76,7 +77,7 @@ public class GameActivity extends Activity {
                     }
                 }
                 tv.setText("TIME LEFT 0:" + checkDigit(timer));
-                timer--;
+                if(!PAUSED) timer--;
             }
             public void onFinish() {
                 tv.setText("TIME UP!");
@@ -147,15 +148,20 @@ public class GameActivity extends Activity {
         }
     }
 
-    public void finishPhase1(){//final Tile.Owner winner) {
-        if(mMediaPlayer.isPlaying())
-            mMediaPlayer.stop();
-        cTimer.cancel();
+    public void finishPhase1() {
+        try {
+            if (mMediaPlayer.isPlaying())
+                mMediaPlayer.stop();
+            cTimer.cancel();
+        }
+        catch (Exception e) {
+
+        }
         mGameFragment.removeIncompleteTiles();
         PHASE2 = true;
         if(timer > 10) {
             sV = findViewById(R.id.score);
-            int score = Integer.parseInt(sV.getText().toString());
+            int score = Integer.parseInt(sV.getText().toString().substring(6).trim());
             score += 5; // 5 bonus points for finishing quick
             sV.setText(score);
             Toast.makeText(getApplicationContext(), "Good Job! Bonus Points Earned For Finishing Quick.", Toast.LENGTH_SHORT).show();
@@ -187,15 +193,25 @@ public class GameActivity extends Activity {
     }
 
     @Override
+    protected  void onResume() {
+        super.onResume();
+        //timerStart(timer * 1000);
+        /*PAUSED = false;
+        playMusic();
+        timerStart(timer * 1000);*/
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        PAUSED = true;
         try {
+            cTimer.cancel();
             mMediaPlayer.stop();
-            mMediaPlayer.reset();
-            mMediaPlayer.release();
+            //mMediaPlayer.release();
         }
         catch (Exception e) {
-            mMediaPlayer.release();
+            //mMediaPlayer.release();
         }
         String gameData = mGameFragment.getState();
         getPreferences(MODE_PRIVATE).edit()
