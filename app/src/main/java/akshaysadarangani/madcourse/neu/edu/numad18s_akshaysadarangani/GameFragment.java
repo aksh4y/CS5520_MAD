@@ -1,5 +1,6 @@
 package akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani;
 
+import android.animation.TimeInterpolator;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -32,11 +35,11 @@ public class GameFragment extends Fragment {
     private Tile mLargeTiles[] = new Tile[9];
     private Tile mSmallTiles[][] = new Tile[9][9];
     private Tile.Owner mPlayer = Tile.Owner.X;
-    private Set<Tile> mAvailable = new HashSet<Tile>();
+    private Set<Tile> mAvailable = new HashSet<>();
+    private boolean mLargeTileAvailable[] = new boolean[9];
     private int mLastLarge;
     private int mLastSmall;
     private int score = 0;
-    private int timer = 90;
     private ImageButton submit;
     private TextView words;
     private String word = "";
@@ -81,7 +84,7 @@ public class GameFragment extends Fragment {
         words = rootView.findViewById(R.id.word);
         words.setText("");
         submit = rootView.findViewById(R.id.button_submit);
-        ImageButton clear = rootView.findViewById(R.id.button_clear);
+        final ImageButton clear = rootView.findViewById(R.id.button_clear);
         final View view = rootView;
         WordsGenerator w = new WordsGenerator(this.getActivity().getApplicationContext());
         for (int large = 0; large < 9; large++) {
@@ -162,26 +165,13 @@ public class GameFragment extends Fragment {
                     }
                     String scoreText = "SCORE: " + Integer.toString(score);
                     scoreView.setText(scoreText);
-                    final TextView timerView = item.findViewById(R.id.timer);
-
-                    new CountDownTimer(90000, 1000) {
-                        public void onTick(long millisUntilFinished) {
-                            timerView.setText("TIME LEFT 0:"+checkDigit(timer));
-                            timer--;
-                        }
-                        public void onFinish() {
-                            timerView.setText("TIME LEFT 0:0");
-                            makeTilesUnavailable(rootView);
-                            cancel();
-                        }
-
-                    }.start();
-
+                    checkBoardOver();
                 }
                 else {
                     Toast.makeText(getActivity().getApplicationContext(), "Invalid word!", Toast.LENGTH_SHORT).show();
-                    //clearTile();
-                    //setAllAvailable();
+                    // shake board
+                    shakeBoard(view);
+
                 }
                 word = "";
             }
@@ -198,6 +188,32 @@ public class GameFragment extends Fragment {
         });
     }
 
+    private  void checkBoardOver() {
+        for(int i = 0; i < 9; i++) {
+            if (!mLargeTiles[i].getmCompleted())
+                return;
+        }
+        // board is over
+        ((GameActivity)getActivity()).finishPhase1();
+    }
+
+    private void shakeBoard(View view) {
+        final float FREQ = 3f;
+        final float DECAY = 2f;
+        // interpolator that goes 1 -> -1 -> 1 -> -1 in a sine wave pattern.
+        TimeInterpolator decayingSineWave = new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                double raw = Math.sin(FREQ * input * 2 * Math.PI);
+                return (float)(raw * Math.exp(-input * DECAY));
+            }
+        };
+        view.findViewById(mLargeIds[mLastLarge]).animate()
+                .xBy(-100)
+                .setInterpolator(decayingSineWave)
+                .setDuration(500)
+                .start();
+    }
     private void lockTile(View v) {
         View outer = v.findViewById(mLargeIds[mLastLarge]);
         for(int j = 0; j < 9; j++) {
@@ -292,7 +308,6 @@ public class GameFragment extends Fragment {
         }
         // If there were none available, make all squares available
         if (mAvailable.isEmpty()) {
-            Log.e("Game Frag", "mAvailable is empty");
             setAllAvailable();
         }
     }

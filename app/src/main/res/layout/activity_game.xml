@@ -37,7 +37,7 @@
             android:textColor="@android:color/white"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:text="SCORE: " />
+            android:text="SCORE: 0" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,8 +59,7 @@
             class="akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.ControlFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_control"
-            android:layout_gravity="bottom"/>
+            tools:layout="@layout/fragment_control"/>
 
     </LinearLayout>
 
