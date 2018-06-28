@@ -5,24 +5,32 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
     public static final String PREF_RESTORE = "pref_restore";
+    public boolean PHASE2 = false;
+    private boolean VOLUME_ON = true;
     private GameFragment mGameFragment;
-    private int timer = 90;
+    public int timer = 20;
     private CountDownTimer cTimer;
     private TextView tv;
+    private TextView sV;
+    private MediaPlayer mMediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        //playMusic();
         // Restore game here...
         mGameFragment = (GameFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
@@ -43,18 +51,40 @@ public class GameActivity extends Activity {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }
 
+    public void playMusic() {
+        mMediaPlayer = MediaPlayer.create(this, R.raw.bg_loop);
+        mMediaPlayer.setVolume(0.5f, 0.5f);
+        mMediaPlayer.setLooping(true);
+        mMediaPlayer.start();
+    }
+
     public void timerStart(long duration) {
         cTimer = new CountDownTimer(duration, 1000) {
             public void onTick(long millisUntilFinished) {
-                if(timer <= 10)
+                if(timer <= 10) {
                     tv.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                    if(timer == 9 && VOLUME_ON) {
+                        try {
+                            if (mMediaPlayer != null && mMediaPlayer.isPlaying())
+                                mMediaPlayer.stop();
+                        }
+                        catch (IllegalStateException e) {
+                            mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
+                        }
+                        mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
+                        mMediaPlayer.start();
+                    }
+                }
                 tv.setText("TIME LEFT 0:" + checkDigit(timer));
                 timer--;
             }
             public void onFinish() {
                 tv.setText("TIME UP!");
                 //makeTilesUnavailable(rootView);
-                finishPhase1();
+                if(!PHASE2)
+                    finishPhase1();
+                else
+                    finishGame();
                 cancel();
             }
 
@@ -74,30 +104,57 @@ public class GameActivity extends Activity {
         timerStart(timer * 1000);
     }
 
+    public void toggleVolume() {
+        ImageButton volume = findViewById(R.id.button_volume_on);
+        VOLUME_ON = !VOLUME_ON;
+        try {
+            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                volume.setImageResource(R.drawable.volume_off);
+                mMediaPlayer.pause();
+            }
+            else {
+                volume.setImageResource(R.drawable.volume_on);
+                mMediaPlayer.start();
+            }
+        }
+        catch (Exception e) {
+            mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
+        }
+    }
+
     public void pauseGame() {
         FragmentManager fm = getFragmentManager();
-
-        if(mGameFragment.isVisible()) {
+        ImageButton pButton = findViewById(R.id.button_pause);
+        if(mMediaPlayer.isPlaying())
+            mMediaPlayer.pause();
+        if(mGameFragment.isVisible()) { // Pause
             cTimer.cancel();
             fm.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .hide(mGameFragment)
                     .commit();
+            pButton.setImageResource(R.drawable.play);
         }
-        else {
+        else {  // Resume
             fm.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .show(mGameFragment)
                     .commit();
+            pButton.setImageResource(R.drawable.pause);
+            if(VOLUME_ON)
+                mMediaPlayer.start();
             timerStart(timer * 1000);
         }
     }
 
     public void finishPhase1(){//final Tile.Owner winner) {
+        if(mMediaPlayer.isPlaying())
+            mMediaPlayer.stop();
         cTimer.cancel();
-
+        mGameFragment.removeIncompleteTiles();
+        PHASE2 = true;
         if(timer > 10) {
-            TextView sV = findViewById(R.id.score);
+            sV = findViewById(R.id.score);
             int score = Integer.parseInt(sV.getText().toString());
             score += 5; // 5 bonus points for finishing quick
             sV.setText(score);
@@ -105,16 +162,20 @@ public class GameActivity extends Activity {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Phase 1 Over! Moving On To Phase 2.");
+        builder.setMessage("Phase 2 Begins!\nEarn Double Points Here\nReuse letters from different tiles in your words");
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.ok_label,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
+                        //finish();
                         // start phase 2
                         mGameFragment.setAvailableForPhase2();
-                        timerStart(30000);
+                        if(VOLUME_ON)
+                            playMusic();
+                        timer = 20;
+                        tv.setTextColor(getResources().getColor(android.R.color.white));
+                        timerStart(timer * 1000);
                     }
                 });
         final Dialog dialog = builder.create();
@@ -125,15 +186,40 @@ public class GameActivity extends Activity {
 
     }
 
-
-
     @Override
     protected void onPause() {
         super.onPause();
+        try {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+        }
+        catch (Exception e) {
+            mMediaPlayer.release();
+        }
         String gameData = mGameFragment.getState();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
                 .commit();
         Log.d("UT3", "state = " + gameData);
+    }
+
+    private void finishGame() {
+        if(mMediaPlayer != null)
+            mMediaPlayer.release();
+        sV = findViewById(R.id.score);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Game Over!\n" + sV.getText() + " points.");
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ok_label,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+        final Dialog dialog = builder.create();
+        dialog.show();
+
     }
 }

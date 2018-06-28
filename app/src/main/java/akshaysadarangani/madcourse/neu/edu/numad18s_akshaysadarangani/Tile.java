@@ -23,6 +23,8 @@ public class Tile {
     private Tile mSubTiles[];
     private boolean mAvailable = true;
     private boolean mCompleted = false;
+    public int small;
+    public int large;
 
     public Tile(GameFragment game) {
         this.mGame = game;

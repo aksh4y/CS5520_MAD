@@ -34,11 +34,11 @@ public class ControlFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                // pause timer
+                // pause game
                 ((GameActivity) getActivity()).pauseGame();
-                /*pause.setBackground(getResources().getDrawable(""));*/
             }
         });
+
         return rootView;
     }
 }
