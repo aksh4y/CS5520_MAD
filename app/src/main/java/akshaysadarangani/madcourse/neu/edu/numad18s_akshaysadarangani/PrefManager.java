@@ -19,11 +19,20 @@ public class PrefManager {
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
 
+    private static final String IS_GAME_SAVED = "IsGameSaved";
+
     public PrefManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
+
+    public void setGameSave(boolean save) {
+        editor.putBoolean(IS_GAME_SAVED, save);
+        editor.commit();
+    }
+
+    public  boolean isGameSaved() { return pref.getBoolean(IS_GAME_SAVED, false); }
 
     public void setFirstTimeLaunch(boolean isFirstTime) {
         editor.putBoolean(IS_FIRST_TIME_LAUNCH, isFirstTime);

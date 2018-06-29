@@ -36,12 +36,10 @@
     <string name="about_label">About</string>
     <string name="ok_label">OK</string>
     <string name="about_text">\This game is played just like
-regular Tic Tac Toe with one difference: to win a tile
-you have to win a smaller game of Tic Tac Toe inside that tile.\n\
+regular Boggle with one difference: to win a tile
+you have to win a smaller game of Scroggle inside that tile.\n\
 \n\
-A tie happens when there are no further moves.
-In the case of a tie in a small board, that will count as a win for
-both sides in the larger game.
+Play two phases with scores doubling in Phase 2 but in reduced time.
 </string>
     <string name="pause_label">Pause</string>
     <string name="submit_label">Submit</string>

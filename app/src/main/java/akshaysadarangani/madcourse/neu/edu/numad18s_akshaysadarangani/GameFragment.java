@@ -37,6 +37,7 @@ public class GameFragment extends Fragment {
             R.id.small9,};
 
     public boolean PHASE2 = false;
+    public boolean RESUME;
     private Tile mEntireBoard = new Tile(this);
     private Tile mLargeTiles[] = new Tile[9];
     private Tile mSmallTiles[][] = new Tile[9][9];
@@ -48,7 +49,6 @@ public class GameFragment extends Fragment {
     private ImageButton volume;
     private TextView words;
     private TextView scoreView;
-    private TextView timer;
     private String word = "";
     private Search search;
     private View view;
@@ -56,6 +56,7 @@ public class GameFragment extends Fragment {
     private Set<String> wordList = new HashSet<>();
     private ToneGenerator toneGen1;
     private Vibrator vibe;
+    private char letters[][] = new char[9][9];
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,8 @@ public class GameFragment extends Fragment {
         search = new Search(inputStream);
         initGame();
         ((GameActivity) getActivity()).playMusic();
+        PrefManager pref = new PrefManager(getActivity().getApplicationContext());
+        RESUME = pref.isGameSaved();
     }
 
     private void clearAvailable() {
@@ -87,6 +90,7 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView =
                 inflater.inflate(R.layout.large_board, container, false);
+        view = rootView;
         initViews(rootView);
         updateAllTiles();
         return rootView;
@@ -112,23 +116,33 @@ public class GameFragment extends Fragment {
         final ImageButton clear = rootView.findViewById(R.id.button_clear);
         view = rootView;
         WordsGenerator w = new WordsGenerator(this.getActivity().getApplicationContext());
+
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
-            char[] letters = w.shuffle(w.getRandomWord()).toCharArray();
+            char[] wordLetters;
+
+            if(!RESUME) {
+                wordLetters = w.shuffle(w.getRandomWord()).toCharArray();
+                buildLettersArray(wordLetters, large);
+            }
+            else {
+                wordLetters = letters[large];
+            }
             for (int small = 0; small < 9; small++) {
                 final Button inner = outer.findViewById
                         (mSmallIds[small]);
                 final int fLarge = large;
                 final int fSmall = small;
                 final Tile smallTile = mSmallTiles[large][small];
-                if(smallTile.letter == ' ')
-                    smallTile.letter = letters[small];
+                if(smallTile.ismAvailable() && smallTile.letter == ' ')
+                    smallTile.letter = wordLetters[small];
                 inner.setText(Character.toString(smallTile.letter));
                 smallTile.setView(inner);
                 smallTile.small = fSmall;
                 smallTile.large = fLarge;
                 inner.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                // if(smallTile.ismAvailable())
                 inner.setEnabled(true);
                 inner.setVisibility(View.VISIBLE);
                 inner.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +280,11 @@ public class GameFragment extends Fragment {
                 ((GameActivity) getActivity()).toggleVolume();
             }
         });
+    }
+
+    private void buildLettersArray(char[] wordLetters, int large) {
+        for(int i = 0; i < 9; i++)
+            letters[large][i] = wordLetters[i];
     }
 
     public void removeIncompleteTiles() {
@@ -518,6 +537,8 @@ public class GameFragment extends Fragment {
     /** Create a string containing the state of the game. */
     public String getState() {
         StringBuilder builder = new StringBuilder();
+        builder.append(true);
+        builder.append(',');
         builder.append(mLastLarge);
         builder.append(',');
         builder.append(mLastSmall);
@@ -525,12 +546,14 @@ public class GameFragment extends Fragment {
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
                 builder.append(mSmallTiles[large][small].ismAvailable());
+                Log.e("AVAIL", Boolean.toString(mSmallTiles[large][small].ismAvailable()));
                 builder.append(',');
             }
         }
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
-                builder.append(mSmallTiles[large][small].letter);
+                /*Log.e("GET", Character.toString(letters[large][small]));*/
+                builder.append(letters[large][small]);  //mSmallTiles[large][small].letter
                 builder.append(',');
             }
         }
@@ -548,6 +571,7 @@ public class GameFragment extends Fragment {
     public void putState(String gameData) {
         String[] fields = gameData.split(",");
         int index = 0;
+        RESUME = Boolean.getBoolean(fields[index++]);
         mLastLarge = Integer.parseInt(fields[index++]);
         mLastSmall = Integer.parseInt(fields[index++]);
         for (int large = 0; large < 9; large++) {
@@ -558,15 +582,15 @@ public class GameFragment extends Fragment {
         }
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
-                mSmallTiles[large][small].letter = fields[index++].charAt(0);
+                letters[large][small] = fields[index++].charAt(0);
+                mSmallTiles[large][small].letter = letters[large][small];
             }
         }
-                word = fields[index++];
+        word = fields[index++];
         ((GameActivity) getActivity()).timer = Integer.parseInt(fields[index++]);
         score = Integer.parseInt(fields[index++]);
-        /*String scoring = "SCORE: " + Integer.toString(score);
-
-        ((GameActivity) getActivity()).sV.setText(scoring);*/
+        ((GameActivity) getActivity()).setScore(score);
+        initViews(view);
         setAvailableFromLastMove(mLastSmall);
         updateAllTiles();
     }

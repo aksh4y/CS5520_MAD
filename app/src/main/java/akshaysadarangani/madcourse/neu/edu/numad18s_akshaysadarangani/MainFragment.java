@@ -29,6 +29,8 @@ public class MainFragment extends Fragment {
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PrefManager pref = new PrefManager(getActivity().getApplicationContext());
+                pref.setGameSave(false);
                 Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                 getActivity().startActivity(intent);
             }

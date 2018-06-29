@@ -69,6 +69,7 @@ public class Tile {
 
     public void updateDrawableState() {
         if (mView == null) return;
+        char l = this.letter;
         int level = getLevel();
         if (mView.getBackground() != null) {
             mView.getBackground().setLevel(level);

@@ -25,24 +25,27 @@ public class GameActivity extends Activity {
     private TextView tv;
     public TextView sV;
     public MediaPlayer mMediaPlayer;
-
+    PrefManager pref;
+    public String gameData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        //playMusic();
+        pref = new PrefManager(this);
         // Restore game here...
         mGameFragment = (GameFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
         boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
         if (restore) {
-            String gameData = getPreferences(MODE_PRIVATE)
+            gameData = getPreferences(MODE_PRIVATE)
                     .getString(PREF_RESTORE, null);
             if (gameData != null) {
                 mGameFragment.putState(gameData);
             }
         }
+        else
+            pref.setGameSave(false);
         tv = findViewById(R.id.timer);
         timerStart(timer * 1000);
         Log.d("UT3", "restore = " + restore);
@@ -103,6 +106,11 @@ public class GameActivity extends Activity {
                 .show(mGameFragment)
                 .commit();
         timerStart(timer * 1000);
+    }
+
+    public void setScore(int score) {
+        sV = findViewById(R.id.score);
+        sV.setText("SCORE: " + Integer.toString(score));
     }
 
     public void toggleVolume() {
@@ -213,6 +221,8 @@ public class GameActivity extends Activity {
         catch (Exception e) {
             //mMediaPlayer.release();
         }
+
+        pref.setGameSave(true);
         String gameData = mGameFragment.getState();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
@@ -236,6 +246,7 @@ public class GameActivity extends Activity {
                 });
         final Dialog dialog = builder.create();
         dialog.show();
-
+        PrefManager pref = new PrefManager(this);
+        pref.setGameSave(false);
     }
 }
