@@ -57,6 +57,7 @@ public class GameFragment extends Fragment {
     private ToneGenerator toneGen1;
     private Vibrator vibe;
     private char letters[][] = new char[9][9];
+    private boolean used[][] = new boolean[9][9];
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,18 +138,26 @@ public class GameFragment extends Fragment {
                 final Tile smallTile = mSmallTiles[large][small];
                 if(smallTile.ismAvailable() && smallTile.letter == ' ')
                     smallTile.letter = wordLetters[small];
+
                 inner.setText(Character.toString(smallTile.letter));
                 smallTile.setView(inner);
                 smallTile.small = fSmall;
                 smallTile.large = fLarge;
                 inner.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 // if(smallTile.ismAvailable())
-                inner.setEnabled(true);
-                inner.setVisibility(View.VISIBLE);
+                if(used[large][small]) {
+                    inner.setEnabled(false);
+                    inner.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    inner.setEnabled(true);
+                    inner.setVisibility(View.VISIBLE);
+                }
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //if (isAvailable(smallTile)) {
+
                         vibe.vibrate(100);
                         if(smallTile.ismAvailable()) {
                             inner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -495,15 +504,6 @@ public class GameFragment extends Fragment {
                     inner.setEnabled(true);
             }
         }
-
-       /* View outer = v.findViewById(mLargeIds[mLastLarge]);
-        for(int j = 0; j < 9; j++) {
-            final Button inner = outer.findViewById
-                    (mSmallIds[j]);
-            final Tile smallTile = mSmallTiles[mLastLarge][j];
-            smallTile.setView(inner);
-            inner.setEnabled(false);
-        }*/
     }
 
     private void makeTilesAvailable(View v) {
@@ -546,7 +546,6 @@ public class GameFragment extends Fragment {
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
                 builder.append(mSmallTiles[large][small].ismAvailable());
-                Log.e("AVAIL", Boolean.toString(mSmallTiles[large][small].ismAvailable()));
                 builder.append(',');
             }
         }
@@ -578,6 +577,7 @@ public class GameFragment extends Fragment {
             for (int small = 0; small < 9; small++) {
                 boolean val = Boolean.getBoolean(fields[index++]);
                 mSmallTiles[large][small].setmAvailable(val);
+                used[large][small] = val;
             }
         }
         for (int large = 0; large < 9; large++) {
@@ -593,6 +593,20 @@ public class GameFragment extends Fragment {
         initViews(view);
         setAvailableFromLastMove(mLastSmall);
         updateAllTiles();
+        //removeCompleteTiles();
+    }
+
+    private  void removeCompleteTiles() {
+        for(int i = 0; i < 9; i++) {
+            View outer = view.findViewById(mLargeIds[i]);
+            for (int j = 0; j < 9; j++) {
+                final Button inner = outer.findViewById(mSmallIds[j]);
+                final Tile smallTile = mSmallTiles[i][j];
+                smallTile.setView(inner);
+                if(smallTile.getmCompleted())
+                    inner.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     public int getPoints(char mLetter) {    // per standard scrabble letter points distribution

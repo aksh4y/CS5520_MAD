@@ -20,7 +20,7 @@ public class GameActivity extends Activity {
     private boolean VOLUME_ON = true;
     public boolean PAUSED = false;
     private GameFragment mGameFragment;
-    public int timer = 20;
+    public int timer = 90;
     public CountDownTimer cTimer;
     private TextView tv;
     public TextView sV;
@@ -48,7 +48,7 @@ public class GameActivity extends Activity {
             pref.setGameSave(false);
         tv = findViewById(R.id.timer);
         timerStart(timer * 1000);
-        Log.d("UT3", "restore = " + restore);
+        Log.d("Scroggle", "restore = " + restore);
     }
 
     public String checkDigit(int number) {
@@ -56,6 +56,8 @@ public class GameActivity extends Activity {
     }
 
     public void playMusic() {
+        if(mMediaPlayer != null)
+            mMediaPlayer.release();
         mMediaPlayer = MediaPlayer.create(this, R.raw.bg_loop);
         mMediaPlayer.setVolume(0.5f, 0.5f);
         mMediaPlayer.setLooping(true);
@@ -69,11 +71,12 @@ public class GameActivity extends Activity {
                     tv.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
                     if(timer == 9 && VOLUME_ON) {
                         try {
-                            if (mMediaPlayer != null && mMediaPlayer.isPlaying())
                                 mMediaPlayer.stop();
+                                mMediaPlayer.reset();
+                                mMediaPlayer.release();
                         }
                         catch (IllegalStateException e) {
-                            mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
+                            //mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
                         }
                         mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
                         mMediaPlayer.start();
@@ -98,6 +101,9 @@ public class GameActivity extends Activity {
     public void restartGame() {
         if(cTimer != null)
             cTimer.cancel();
+        try {
+            playMusic();
+        } catch (Exception e) {}
         timer = 90;
         mGameFragment.restartGame();
         tv.setTextColor(getResources().getColor(android.R.color.white));
@@ -134,8 +140,13 @@ public class GameActivity extends Activity {
     public void pauseGame() {
         FragmentManager fm = getFragmentManager();
         ImageButton pButton = findViewById(R.id.button_pause);
-        if(mMediaPlayer.isPlaying())
-            mMediaPlayer.pause();
+        try {
+            if (mMediaPlayer.isPlaying())
+                mMediaPlayer.pause();
+        }
+        catch (Exception e) {
+
+        }
         if(mGameFragment.isVisible()) { // Pause
             cTimer.cancel();
             fm.beginTransaction()
@@ -169,9 +180,12 @@ public class GameActivity extends Activity {
         PHASE2 = true;
         if(timer > 10) {
             sV = findViewById(R.id.score);
-            int score = Integer.parseInt(sV.getText().toString().substring(6).trim());
+            String s = sV.getText().toString().substring(6).trim();
+            int score = 0;
+            if(!s.isEmpty())
+                score = Integer.parseInt(s);
             score += 5; // 5 bonus points for finishing quick
-            sV.setText(score);
+            setScore(score);
             Toast.makeText(getApplicationContext(), "Good Job! Bonus Points Earned For Finishing Quick.", Toast.LENGTH_SHORT).show();
         }
 
@@ -187,7 +201,7 @@ public class GameActivity extends Activity {
                         mGameFragment.setAvailableForPhase2();
                         if(VOLUME_ON)
                             playMusic();
-                        timer = 20;
+                        timer = 30;
                         tv.setTextColor(getResources().getColor(android.R.color.white));
                         timerStart(timer * 1000);
                     }
@@ -203,10 +217,6 @@ public class GameActivity extends Activity {
     @Override
     protected  void onResume() {
         super.onResume();
-        //timerStart(timer * 1000);
-        /*PAUSED = false;
-        playMusic();
-        timerStart(timer * 1000);*/
     }
 
     @Override
@@ -216,12 +226,11 @@ public class GameActivity extends Activity {
         try {
             cTimer.cancel();
             mMediaPlayer.stop();
-            //mMediaPlayer.release();
+            mMediaPlayer.release();
         }
         catch (Exception e) {
             //mMediaPlayer.release();
         }
-
         pref.setGameSave(true);
         String gameData = mGameFragment.getState();
         getPreferences(MODE_PRIVATE).edit()
