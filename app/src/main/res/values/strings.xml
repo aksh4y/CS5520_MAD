@@ -52,19 +52,21 @@ Play two phases with scores doubling in Phase 2 but in reduced time.
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">Welcome!</string>
-    <string name="slide_1_desc">Make valid words in each board to score points. Longer words score bigger.</string>
+    <string name="slide_1_title">WELCOME</string>
+    <string name="slide_1_desc">Select letters to form words in each board to score points. Finish before the timer runs out to score bonus points.</string>
 
-    <string name="slide_2_title">Instructions</string>
-    <string name="slide_2_desc">Select 3 or more letters in the order of the word and click the check mark to submit.</string>
+    <string name="slide_2_title">FANTASTIC</string>
+    <string name="slide_2_desc">Select 3 or more letters in the order of the word and click the check mark to submit. Longer words score bigger.</string>
 
 
-    <string name="slide_3_title">Buttons</string>
-    <string name="slide_3_desc">Use the pause button to Pause the game, Volume button to toggle game sounds and Clear button to clear a selection of letters</string>
+    <string name="slide_3_title">NAVIGATION</string>
+    <string name="slide_3_desc">Use the Volume button to toggle game sounds\nClear button to clear all selected tiles\nSubmit button to submit a word</string>
 
-    <string name="slide_4_title">Scoring</string>
-    <string name="slide_4_desc">Score points based on scrabble letters and word length. Earn bonus scores when you beat the clock and for using all 9 letters of a block. Lose -2 for wrong words.</string>
+    <string name="slide_4_title">SCORING</string>
+    <string name="slide_4_desc">Score points based on scrabble letters and word length. Earn bonus scores when you beat the clock and for using all 9 letters of a block. \nNote that you lose points for wrong words so it\'s better to select a smaller valid word than an incorrect longer one.</string>
 
     <string name="play_again_desc">To see the game instructions again, click How to Play in the Word Game screen</string>
     <string name="play_again">Play Again</string>
+    <string name="leaderboard_label">Leaderboard</string>
+    <string name="scoreboard_label">Scoreboard</string>
 </resources>

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentManager;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -47,6 +49,7 @@ public class GameActivity extends Activity {
         else
             pref.setGameSave(false);
         tv = findViewById(R.id.timer);
+        sV = findViewById(R.id.score);
         timerStart(timer * 1000);
         Log.d("Scroggle", "restore = " + restore);
     }
@@ -56,8 +59,10 @@ public class GameActivity extends Activity {
     }
 
     public void playMusic() {
-        if(mMediaPlayer != null)
+        if(mMediaPlayer != null) {
+            mMediaPlayer.reset();
             mMediaPlayer.release();
+        }
         mMediaPlayer = MediaPlayer.create(this, R.raw.bg_loop);
         mMediaPlayer.setVolume(0.5f, 0.5f);
         mMediaPlayer.setLooping(true);
@@ -71,14 +76,15 @@ public class GameActivity extends Activity {
                     tv.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
                     if(timer == 9 && VOLUME_ON) {
                         try {
-                                mMediaPlayer.stop();
-                                mMediaPlayer.reset();
-                                mMediaPlayer.release();
+                            mMediaPlayer.stop();
+                            mMediaPlayer.reset();
+                            mMediaPlayer.release();
                         }
                         catch (IllegalStateException e) {
                             //mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
                         }
                         mMediaPlayer = MediaPlayer.create(getApplication(), R.raw.timer);
+
                         mMediaPlayer.start();
                     }
                 }
@@ -101,9 +107,10 @@ public class GameActivity extends Activity {
     public void restartGame() {
         if(cTimer != null)
             cTimer.cancel();
-        try {
-            playMusic();
-        } catch (Exception e) {}
+        if(VOLUME_ON)
+            try {
+                playMusic();
+            } catch (Exception e) {}
         timer = 90;
         mGameFragment.restartGame();
         tv.setTextColor(getResources().getColor(android.R.color.white));
@@ -115,7 +122,7 @@ public class GameActivity extends Activity {
     }
 
     public void setScore(int score) {
-        sV = findViewById(R.id.score);
+        /*sV = findViewById(R.id.score);*/
         sV.setText("SCORE: " + Integer.toString(score));
     }
 
@@ -125,6 +132,8 @@ public class GameActivity extends Activity {
         try {
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                 volume.setImageResource(R.drawable.volume_off);
+                // volume.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                //       LinearLayout.LayoutParams.WRAP_CONTENT));
                 mMediaPlayer.pause();
             }
             else {
@@ -154,6 +163,8 @@ public class GameActivity extends Activity {
                     .hide(mGameFragment)
                     .commit();
             pButton.setImageResource(R.drawable.play);
+            // pButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+            //       LinearLayout.LayoutParams.WRAP_CONTENT));
         }
         else {  // Resume
             fm.beginTransaction()
@@ -179,7 +190,6 @@ public class GameActivity extends Activity {
         mGameFragment.removeIncompleteTiles();
         PHASE2 = true;
         if(timer > 10) {
-            sV = findViewById(R.id.score);
             String s = sV.getText().toString().substring(6).trim();
             int score = 0;
             if(!s.isEmpty())
@@ -220,12 +230,39 @@ public class GameActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+        }
+        catch (Exception e) {
+            //mMediaPlayer.release();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+        }
+        catch (Exception e) {
+            //mMediaPlayer.release();
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         PAUSED = true;
         try {
             cTimer.cancel();
             mMediaPlayer.stop();
+            mMediaPlayer.reset();
             mMediaPlayer.release();
         }
         catch (Exception e) {
@@ -240,9 +277,11 @@ public class GameActivity extends Activity {
     }
 
     private void finishGame() {
-        if(mMediaPlayer != null)
+        if(mMediaPlayer != null) {
+            mMediaPlayer.reset();
             mMediaPlayer.release();
-        sV = findViewById(R.id.score);
+        }
+/*        sV = findViewById(R.id.score);*/
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Game Over!\n" + sV.getText() + " points.");
         builder.setCancelable(false);
@@ -257,5 +296,16 @@ public class GameActivity extends Activity {
         dialog.show();
         PrefManager pref = new PrefManager(this);
         pref.setGameSave(false);
+        saveToDB(); // Scoreboard
+    }
+
+    private void saveToDB() {
+        SQLiteDatabase database = new ScoreboardDatabase(this).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ScoreboardDatabase.SCOREBOARD_COLUMN_NAME, "YOU");
+        String s = sV.getText().toString().substring(6).trim();
+        values.put(ScoreboardDatabase.SCOREBOARD_COLUMN_SCORE, s);
+        values.put(ScoreboardDatabase.SCOREBOARD_COLUMN_TIMESTAMP, " time('now') " );
+        database.insert(ScoreboardDatabase.SCOREBOARD_TABLE_NAME, null, values);
     }
 }

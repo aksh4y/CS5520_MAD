@@ -17,7 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -199,7 +198,8 @@ public class GameFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FrameLayout fl = getActivity().findViewById(R.id.frameLayout1);
+                //FrameLayout fl = getActivity().findViewById(R.id.frameLayout1);
+                LinearLayout fl = getActivity().findViewById(R.id.frameLayout1);
                 LinearLayout item = fl.findViewById(R.id.linearLayout1);
                 scoreView = item.findViewById(R.id.score);
                 if(word.length() < 3) {
@@ -240,18 +240,18 @@ public class GameFragment extends Fragment {
                         score = Integer.parseInt(scoreView.getText().toString().substring(6).trim());
                     for(char ch : word.toCharArray()) {
                         if(PHASE2)  // double points in phase 2
-                            score += (2 * getPoints(Character.toUpperCase(ch)));
+                            score += (10 * getPoints(Character.toUpperCase(ch)));
                         else
-                            score += getPoints(Character.toUpperCase(ch));
+                            score += (5 * getPoints(Character.toUpperCase(ch)));
                     }
                     if(word.length() == 9) {  // 5 bonus points for finding longest word
-                        score += 5;
+                        score += 20;
                         Toast.makeText(getActivity().getApplicationContext(), "Good Job! Bonus Points Earned.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Invalid word! -2 Points", Toast.LENGTH_SHORT).show();
-                    score -= 2;
+                    Toast.makeText(getActivity().getApplicationContext(), "Invalid word! -10 Points", Toast.LENGTH_SHORT).show();
+                    score -= 10;
                     shakeBoard(view);   // shake board
                     try {
                         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
@@ -551,7 +551,6 @@ public class GameFragment extends Fragment {
         }
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
-                /*Log.e("GET", Character.toString(letters[large][small]));*/
                 builder.append(letters[large][small]);  //mSmallTiles[large][small].letter
                 builder.append(',');
             }
@@ -560,7 +559,6 @@ public class GameFragment extends Fragment {
         builder.append(',');
         builder.append(((GameActivity) getActivity()).timer);
         builder.append(',');
-        Log.e("GET", Integer.toString(score));
         builder.append(score);
         builder.append(',');
         return builder.toString();

@@ -1,12 +1,14 @@
 <LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     >
    <GridLayout
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal"
        tools:context=".GameActivity">
       <include android:id="@+id/large1" layout="@layout/small_board"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -49,6 +51,8 @@
    <LinearLayout android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:orientation="horizontal"
+       android:layout_gravity="center_horizontal"
+       android:gravity="center_horizontal"
        xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:tools="http://schemas.android.com/tools"
        >
@@ -81,11 +85,11 @@
    <TextView
        android:id="@+id/word"
        android:layout_width="match_parent"
-       android:layout_height="45dp"
+       android:layout_height="35dp"
        android:textColor="@color/colorAccent"
-       android:textStyle="bold"
        android:textAllCaps="true"
        android:textAlignment="center"
        android:maxLines="50"
-       android:textSize="12sp" />
+       android:textStyle="bold"
+       android:textSize="10sp" />
 </LinearLayout>
