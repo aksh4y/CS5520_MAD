@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
     public static final String PREF_RESTORE = "pref_restore";
@@ -59,10 +61,10 @@ public class GameActivity extends Activity {
     }
 
     public void playMusic() {
-        if(mMediaPlayer != null) {
+        try {
             mMediaPlayer.reset();
             mMediaPlayer.release();
-        }
+        } catch (Exception e) { }
         mMediaPlayer = MediaPlayer.create(this, R.raw.bg_loop);
         mMediaPlayer.setVolume(0.5f, 0.5f);
         mMediaPlayer.setLooping(true);
@@ -281,7 +283,7 @@ public class GameActivity extends Activity {
             mMediaPlayer.reset();
             mMediaPlayer.release();
         }
-/*        sV = findViewById(R.id.score);*/
+        /*        sV = findViewById(R.id.score);*/
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Game Over!\n" + sV.getText() + " points.");
         builder.setCancelable(false);
@@ -306,6 +308,24 @@ public class GameActivity extends Activity {
         String s = sV.getText().toString().substring(6).trim();
         values.put(ScoreboardDatabase.SCOREBOARD_COLUMN_SCORE, s);
         values.put(ScoreboardDatabase.SCOREBOARD_COLUMN_TIMESTAMP, " time('now') " );
-        database.insert(ScoreboardDatabase.SCOREBOARD_TABLE_NAME, null, values);
+        ScoreboardDatabase db = new ScoreboardDatabase(getApplicationContext());
+        List<String> scores = db.readScores();
+        int size = scores.size();
+        if(size > 0) {
+            if (Integer.parseInt(scores.get(0)) < Integer.parseInt(s)) {
+                db.updateScoreToFirebase(Integer.parseInt(s));
+            }
+        }
+        else {
+            db.updateScoreToFirebase(Integer.parseInt(s));
+        }
+
+
+        if(size < 10)      // Maintain only top 10 scores
+            database.insert(ScoreboardDatabase.SCOREBOARD_TABLE_NAME, null, values);
+        else if(Integer.parseInt(scores.get(size - 1)) < Integer.parseInt(s)) {    // Remove lowest score
+            db.deleteScore(Integer.parseInt(scores.get(size - 1)));
+            database.insert(ScoreboardDatabase.SCOREBOARD_TABLE_NAME, null, values);
+        }
     }
 }

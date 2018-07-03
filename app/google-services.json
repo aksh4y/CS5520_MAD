@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "575538518272",
+    "firebase_url": "https://numad18sakshaysadarangani.firebaseio.com",
+    "project_id": "numad18sakshaysadarangani",
+    "storage_bucket": "numad18sakshaysadarangani.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575538518272:android:d77b978d141366e2",
+        "android_client_info": {
+          "package_name": "akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575538518272-s7tvlh1rhm56jns3oif8onc4atbfr39d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani",
+            "certificate_hash": "511f81528ded1b87f874bf0963db67e458268f17"
+          }
+        },
+        {
+          "client_id": "575538518272-55d5pb1pbgifl3altt8k12j9olo546m2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaLvEkayfjmlKzWSK_B5Gl-90RUvQAk9Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575538518272-55d5pb1pbgifl3altt8k12j9olo546m2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

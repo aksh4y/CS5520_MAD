@@ -1,16 +1,14 @@
 package akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani;
 
 public class Score {
-    int id;
+    String id;
     String name;
     int score;
-    String timestamp;
 
-    public Score(int id, String name, int score, String timestamp) {
+    public Score(String id, String name, int score) {
         this.id = id;
         this.name = name;
         this.score = score;
-        this.timestamp = timestamp;
     }
 
     public Score() { }
@@ -32,20 +30,12 @@ public class Score {
         this.score = score;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getId() {
+    public String getId() {
 
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

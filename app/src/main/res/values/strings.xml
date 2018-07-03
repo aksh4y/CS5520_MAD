@@ -67,6 +67,19 @@ Play two phases with scores doubling in Phase 2 but in reduced time.
 
     <string name="play_again_desc">To see the game instructions again, click How to Play in the Word Game screen</string>
     <string name="play_again">Play Again</string>
-    <string name="leaderboard_label">Leaderboard</string>
-    <string name="scoreboard_label">Scoreboard</string>
+    <string name="leaderboard_label">LEADERBOARD</string>
+    <string name="leaderboard_subtitle">GLOBAL LEADERS</string>
+    <string name="scoreboard_label">SCOREBOARD</string>
+    <string name="scoreboard_subtitle">YOUR TOP 10 SCORES</string>
+    <string name="scoreboard_title">SCOREBOARD</string>
+
+    <string name="sign_out">Sign Out</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="google_status_fmt">Google User: %s</string>
+    <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="title_activity_leaderboard">LeaderboardActivity</string>
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
 </resources>

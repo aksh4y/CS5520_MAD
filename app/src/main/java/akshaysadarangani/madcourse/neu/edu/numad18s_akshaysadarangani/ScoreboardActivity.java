@@ -4,10 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ScoreboardActivity extends AppCompatActivity {
@@ -21,8 +17,8 @@ public class ScoreboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-        scores = new ArrayList<>();
-        scores = readScores();
+        ScoreboardDatabase db = new ScoreboardDatabase(getApplicationContext());
+        scores = db.readScores();
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
@@ -33,23 +29,5 @@ public class ScoreboardActivity extends AppCompatActivity {
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(scores);
         mRecyclerView.setAdapter(mAdapter);
-        //mAdapter.notifyDataSetChanged();
-    }
-
-
-    public List<String> readScores() {
-        ScoreboardDatabase db = new ScoreboardDatabase(getApplicationContext());
-        List<Score> val = db.getAllvalues();
-        List<String> scores = new ArrayList<>();
-
-        for (Score cn : val) {
-           /* String log = "Id: " + cn.getId() + " ,values: "
-                    + cn.getName() + ", " + cn.getScore() + ", " + cn.getTimestamp();*/
-            scores.add(Integer.toString(cn.getScore()));
-        }
-        scores.add("20");
-
-        Collections.sort(scores);
-        return scores;
     }
 }

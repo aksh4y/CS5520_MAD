@@ -26,6 +26,7 @@ public class MainFragment extends Fragment {
         View ack = rootView.findViewById(R.id.ack_button);
         View howto = rootView.findViewById(R.id.about_howto);
         View scoreboard = rootView.findViewById(R.id.scoreboard_button);
+        View leaderboard = rootView.findViewById(R.id.leaderboard_button);
 
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +89,13 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ScoreboardActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        leaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SigninActivity.class);
                 getActivity().startActivity(intent);
             }
         });
