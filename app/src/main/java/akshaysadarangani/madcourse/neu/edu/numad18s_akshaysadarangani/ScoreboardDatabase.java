@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.utils.SendNotification;
+
 public class ScoreboardDatabase extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "scoreboard_db";
@@ -104,7 +106,8 @@ public class ScoreboardDatabase extends SQLiteOpenHelper {
                         @Override
                         public void onSuccess(Void aVoid) {
                             // Write was successful!
-                            // USE FCM to send push notification
+                            SendNotification notif = new SendNotification();
+                            notif.sendMessageToGlobal();
 
                         }
                     })

@@ -19,6 +19,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_ic_notification" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <!-- [END fcm_default_icon] -->
+        <!-- [START fcm_default_channel] -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
+        <!-- [END fcm_default_channel] -->
+
+        <service android:name=".service.MyFirebaseInstanceIDService" >
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".AboutActivity" />
         <activity
             android:name=".DictionaryActivity"
@@ -29,7 +55,9 @@
             android:name=".GameActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".ScoreboardActivity"></activity>
+        <activity android:name=".ScoreboardActivity" />
+        <activity android:name=".LeaderboardActivity"/>
+        <activity android:name=".SigninActivity" />
     </application>
 
 </manifest>

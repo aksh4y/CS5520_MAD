@@ -1,6 +1,7 @@
 package akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.app.Config;
+
 
 public class SigninActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -38,6 +41,7 @@ public class SigninActivity extends AppCompatActivity implements
     private ProgressBar progressBar;
     private static final int RC_SIGN_IN = 9001;
     private String userID;
+    private String actvty;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,9 @@ public class SigninActivity extends AppCompatActivity implements
         // get reference to 'users' node
         mFirebaseDatabase = mFirebaseInstance.getReference("scores");
         // [END initialize_auth]
+
+        Intent intent = getIntent();
+        actvty = intent.getStringExtra("CLASS");
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -128,8 +135,11 @@ public class SigninActivity extends AppCompatActivity implements
                             userID = user.getUid();
                             PrefManager prefManager = new PrefManager(getApplicationContext());
                             prefManager.setUID(userID);
+                            prefManager.setUserName(user.getDisplayName());
                             progressBar.setVisibility(View.GONE);
-                            User u = new User(user.getDisplayName(), user.getEmail(), 0);
+                            SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+                            String regId = pref.getString("regId", null);
+                            User u = new User(regId, user.getDisplayName(), user.getEmail(), 0);
                             mFirebaseDatabase.child(userID).setValue(u);
                             finish();
                         } else {
@@ -150,7 +160,11 @@ public class SigninActivity extends AppCompatActivity implements
     // [END auth_with_google]
 
     public void switchIntent(FirebaseUser currentUser) {
-        Intent myIntent = new Intent(SigninActivity.this, LeaderboardActivity.class);
+        Intent myIntent;
+        if(actvty.equals("Leaderboard"))
+            myIntent = new Intent(SigninActivity.this, LeaderboardActivity.class);
+        else
+            myIntent = new Intent(SigninActivity.this, WelcomeActivity.class);
         myIntent.putExtra("userName", currentUser.getDisplayName());
         myIntent.putExtra("uid", currentUser.getUid());
         SigninActivity.this.startActivity(myIntent);

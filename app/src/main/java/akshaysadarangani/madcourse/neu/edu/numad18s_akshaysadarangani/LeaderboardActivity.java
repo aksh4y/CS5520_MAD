@@ -1,7 +1,6 @@
 package akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,21 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import akshaysadarangani.madcourse.neu.edu.numad18s_akshaysadarangani.utils.SendNotification;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
@@ -58,9 +51,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        SendNotification notif = new SendNotification();
-        notif.sendMessageToGlobal();
-
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("scores");
@@ -77,10 +67,11 @@ public class LeaderboardActivity extends AppCompatActivity {
                 }
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        String fID = postSnapshot.child("fID").getValue().toString();
                         String name = postSnapshot.child("name").getValue().toString();
                         String email = postSnapshot.child("email").getValue().toString();
                         int score = Integer.parseInt(postSnapshot.child("score").getValue().toString());
-                        User w = new User(name, email, score);
+                        User w = new User(fID, name, email, score);
                         scoreList.add(w);
                         Collections.sort(scoreList, Collections.reverseOrder(new Comparator<User>() {
                             @Override

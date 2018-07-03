@@ -13,7 +13,6 @@ public class PrefManager {
 
     // shared pref mode
     int PRIVATE_MODE = 0;
-    private static final String USER_ID = "uid";
 
     // Shared preferences file name
     private static final String PREF_NAME = "scroggle-howto";
@@ -21,6 +20,10 @@ public class PrefManager {
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
 
     private static final String IS_GAME_SAVED = "IsGameSaved";
+
+    private static final String USER_ID = "uid";
+
+    private static final String USER_NAME = "userName";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -36,6 +39,13 @@ public class PrefManager {
     public String getUID() {
         return pref.getString(USER_ID, null);
     }
+
+    public void setUserName(String userName) {
+        editor.putString(USER_NAME, userName);
+        editor.commit();
+    }
+
+    public String getUserName() { return pref.getString(USER_NAME, null); }
 
     public void setGameSave(boolean save) {
         editor.putBoolean(IS_GAME_SAVED, save);

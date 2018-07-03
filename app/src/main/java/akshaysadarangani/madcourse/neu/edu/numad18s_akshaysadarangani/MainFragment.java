@@ -33,7 +33,8 @@ public class MainFragment extends Fragment {
             public void onClick(View view) {
                 PrefManager pref = new PrefManager(getActivity().getApplicationContext());
                 pref.setGameSave(false);
-                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                Intent intent = new Intent(getActivity(), SigninActivity.class);
+                intent.putExtra("CLASS", "Welcome");
                 getActivity().startActivity(intent);
             }
         });
@@ -96,6 +97,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SigninActivity.class);
+                intent.putExtra("CLASS", "Leaderboard");
                 getActivity().startActivity(intent);
             }
         });
